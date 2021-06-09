@@ -19,18 +19,22 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     body: caption,
     dateFromNowStr,
     icon,
-    read,
+    read: isRead,
   } = getEnrichedMessage(message);
+  
+  const dateColor = isRead ? "gray-800" : "primary";
+  const titleColor = isRead ? "gray-800" : "black";
+  const subtitleColor = isRead ? "gray-800" : "black";
 
   return (
     <Box
-      variant={!read ? "containers.message.default" : "containers.message.read"}
+      variant={!isRead ? "containers.message.default" : "containers.message.read"}
     >
       <Flex sx={{ maxHeight: "100%" }}>
         <i
           className={icon}
           sx={{
-            variant: read ? "icons.disabled" : "icons.enabled",
+            variant: isRead ? "icons.disabled" : "icons.enabled",
             height: 18,
             width: 18,
           }}
@@ -45,10 +49,10 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
         >
           <Column>
             <Box>
-              <Text>{titleLeading}</Text>
-              <Text>{titleTrailing}</Text>
+              <Text color={titleColor}>{titleLeading}</Text>
+              <Text color={titleColor}>{titleTrailing}</Text>
             </Box>
-            <Text>{subtitle}</Text>
+            <Text color={subtitleColor}>{subtitle}</Text>
             {/* <Text
               sx={{
                 textOverflow: "ellipsis",
@@ -59,7 +63,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
               {caption}
             </Text> */}
           </Column>
-          <Text sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}>
+          <Text color={dateColor} sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}>
             {dateFromNowStr}
           </Text>
         </Box>

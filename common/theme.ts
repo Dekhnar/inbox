@@ -8,6 +8,7 @@ const theme = {
     secondary: "#1E91FF",
     background: "#F9F9F9",
     gray: "#D8D8D8",
+    "gray-800": "#777777"
   },
   containers: {
     navbar: {
@@ -57,7 +58,7 @@ const theme = {
   },
   icons: {
     enabled: { color: "primary" },
-    disabled: { color: "gray" },
+    disabled: { color: "#DADADA" },
   },
   styles: {
     ...roboto.styles,
