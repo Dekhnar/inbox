@@ -23,7 +23,9 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
   } = getEnrichedMessage(message);
 
   return (
-    <Box variant="containers.message.default">
+    <Box
+      variant={!read ? "containers.message.default" : "containers.message.read"}
+    >
       <Flex sx={{ maxHeight: "100%" }}>
         <i
           className={icon}
@@ -47,7 +49,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
               <Text>{titleTrailing}</Text>
             </Box>
             <Text>{subtitle}</Text>
-            <Text
+            {/* <Text
               sx={{
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
@@ -55,7 +57,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
               }}
             >
               {caption}
-            </Text>
+            </Text> */}
           </Column>
           <Text sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}>
             {dateStr}
@@ -81,7 +83,7 @@ const MessageList = () => {
   if (loading && !messages?.length) return <Text>Loading...</Text>;
 
   return (
-    <div>
+    <div sx={{ borderRight: "1px #D8D8D8 solid" }}>
       {messages?.map((message) => [
         <MessageListItem key={message.id} message={message} />,
         <Divider m="0" key={"$" + message.id} />,

@@ -11,6 +11,7 @@ const InboxHeader = () => {
       sx={{
         variant: "containers.navbar",
         position: "fixed",
+        zIndex: "999",
         width: "100%",
         display: "flex",
         alignItems: "center",

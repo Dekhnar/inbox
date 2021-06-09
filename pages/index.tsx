@@ -11,10 +11,20 @@ export default function Home() {
     <Inbox>
       <InboxHeader />
       <Flex sx={{ pt: 60 }}>
-        <MessageList/>
-        <Box sx={{ flex: "1 1 auto", display: ["none", "block", "block"] }}>
+        <div sx={{ flex: "1 1 auto" }}>
+          <MessageList />
+        </div>
+        <div
+          sx={{
+            flex: "2 1 auto",
+            display: "block",
+            "@media screen and (max-width: 749px)": {
+              display: "none",
+            },
+          }}
+        >
           <MessageDetail />
-        </Box>
+        </div>
       </Flex>
     </Inbox>
   );
