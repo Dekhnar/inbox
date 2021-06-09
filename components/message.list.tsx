@@ -1,48 +1,11 @@
-import { Flex, Box, Divider, Image, Text } from "theme-ui";
+/** @jsxImportSource theme-ui */
+
+import { Flex, Box, Divider, Text } from "theme-ui";
 import { Message } from "@api";
 import { useMessagesQuery } from "@data/use-messages.query";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
-
-const getUserFullName = ({
-  firstname,
-  lastname,
-}: {
-  firstname: string;
-  lastname: string;
-}) => `${firstname} ${lastname}`;
-
-const getMessageTitle = (message: Message) => {
-  const { type, contact } = message;
-  const { firstname, lastname } = message?.contact ?? {};
-  const userFullName =
-    firstname && lastname ? getUserFullName({ firstname, lastname }) : "";
-  return userFullName
-    ? userFullName
-    : type === "phone"
-    ? contact?.phone ?? ""
-    : "";
-};
-
-const getDateString = (message: Message) => {
-  return "DATE";
-};
-
-const getEnrichedMessage = (
-  message: Message
-): Message & {
-  titleLeading: string;
-  subtitle: string;
-  dateStr: string;
-  titleTrailing: string;
-} => {
-  const titleLeading = getMessageTitle(message);
-  const phone = message?.contact?.phone;
-  const titleTrailing =
-    titleLeading && phone && titleLeading != phone ? `(${phone})` : "";
-  const dateStr = getDateString(message);
-  const subtitle = message?.subject || "";
-  return { ...message, titleLeading, dateStr, subtitle, titleTrailing };
-};
+import Column from "@components/_base-column";
+import getEnrichedMessage from "@utils/message";
 
 interface MessageListItemProps {
   message: Message;
@@ -55,15 +18,21 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     subtitle,
     body: caption,
     dateStr,
+    icon,
+    read,
   } = getEnrichedMessage(message);
 
   return (
     <Box variant="containers.message.default">
       <Flex sx={{ maxHeight: "100%" }}>
-        <Image
-          src="http://via.placeholder.com/18/18"
-          sx={{ height: 18, width: 18, minHeigh: 18, minWidth: 18 }}
-        />
+        <i
+          className={icon}
+          sx={{
+            variant: read ? "icons.disabled" : "icons.enabled",
+            height: 18,
+            width: 18,
+          }}
+        ></i>
         <Box
           ml={10}
           sx={{
@@ -72,7 +41,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
             position: "relative",
           }}
         >
-          <Flex sx={{ flexDirection: "column" }}>
+          <Column>
             <Box>
               <Text>{titleLeading}</Text>
               <Text>{titleTrailing}</Text>
@@ -87,7 +56,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
             >
               {caption}
             </Text>
-          </Flex>
+          </Column>
           <Text sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}>
             {dateStr}
           </Text>
@@ -112,12 +81,12 @@ const MessageList = () => {
   if (loading && !messages?.length) return <Text>Loading...</Text>;
 
   return (
-    <Box>
+    <div>
       {messages?.map((message) => [
         <MessageListItem key={message.id} message={message} />,
-        <Divider m="0" />,
+        <Divider m="0" key={"$" + message.id} />,
       ])}
-    </Box>
+    </div>
   );
 };
 

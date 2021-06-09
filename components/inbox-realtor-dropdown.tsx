@@ -16,7 +16,7 @@ const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
   if (isNotVisible || !data) return <div />;
 
   const options = data.map(({ name, id }) => ({
-    value: name || "Unvailable",
+    value: "Agence" + (name || "Unvailable"),
     label: id || "Unvailable",
   }));
 
@@ -25,10 +25,6 @@ const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
       <Select
         // onChange={(e) => handleChange(e)}
         options={options}
-        unselected={{
-          value: "empty",
-          label: "pls select",
-        }}
         value="ebin"
         defaultValue={options[0].value}
       />

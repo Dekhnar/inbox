@@ -40,13 +40,23 @@ const theme = {
       },
     },
     counter: {
-      enabled: { backgroundColor: "primary" },
-      disabled: { backgroundColor: "#757575" },
+      enabled: {
+        backgroundColor: "primary",
+        width: "61px",
+        height: "31px",
+        borderRadius: "8px",
+      },
+      disabled: {
+        backgroundColor: "#757575",
+        width: "61px",
+        height: "31px",
+        borderRadius: "8px",
+      },
     },
   },
   icons: {
-    enabled: { backgroundColor: "primary" },
-    disabled: { backgroundColor: "gray" },
+    enabled: { color: "primary" },
+    disabled: { color: "gray" },
   },
   styles: {
     ...roboto.styles,

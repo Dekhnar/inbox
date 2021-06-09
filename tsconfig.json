@@ -22,8 +22,6 @@
       "@common/*": ["common/*"],
       "@contexts/*": ["contexts/*"],
       "@data/*": ["data/*"],
-      "@repositories/*": ["repositories/*"],
-      "@ts-types/*": ["ts-types/*"],
       "@utils/*": ["utils/*"]
     }
   },
