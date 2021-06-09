@@ -48,6 +48,7 @@ const MessageDetail: React.FC = () => {
             variant: "containers.card",
             minHeight: "122px",
             marginBottom: "22px",
+            flexGrow: 1,
             paddingLeft,
             paddingTop: "22px",
           }}
@@ -93,7 +94,7 @@ const MessageDetail: React.FC = () => {
           sx={{
             variant: "containers.card",
             minHeight: "637px",
-            flexGrow: 1,
+            flexGrow: 2,
             paddingLeft,
             paddingTop: "28px",
             paddingRight: "29px",

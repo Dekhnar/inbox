@@ -1,4 +1,20 @@
 import { Message } from "@api";
+import Days from 'dayjs'
+import 'dayjs/locale/fr';
+import updateLocale from 'dayjs/plugin/updateLocale';
+import calendar from 'dayjs/plugin/calendar';
+import dayjs from "dayjs";
+
+Days.extend(updateLocale);
+Days.extend(calendar);
+Days.locale("fr");
+Days.updateLocale('fr', {
+    calendar: {
+        lastDay: '[Hier]',
+        sameDay: 'h:mm',
+        sameElse: 'D/M/YY',
+    },
+});
 
 const getUserFullName = ({
     firstname,
@@ -27,9 +43,15 @@ const getMessageIcon = (message: Message) => {
     return "mail";
 };
 
+
+
+const getDateFromNowString = (message: Message) => {
+    const formattedDate = dayjs().calendar(dayjs(message.date))
+    return formattedDate;
+};
+
 const getDateString = (message: Message) => {
-    // const parsedTime = new Dayjs(message?.date as string);
-    return "date";
+    return dayjs(message.date).format("d MMM YYYY à h:mm");
 };
 
 const getEnrichedMessage = (
@@ -37,7 +59,8 @@ const getEnrichedMessage = (
 ): Message & {
     titleLeading: string;
     subtitle: string;
-    dateStr: string;
+        dateFromNowStr: string;
+        dateStr: string;
     titleTrailing: string;
     icon: string;
 } => {
@@ -45,10 +68,11 @@ const getEnrichedMessage = (
     const phone = message?.contact?.phone;
     const titleTrailing =
         titleLeading && phone && titleLeading != phone ? `(${phone})` : "";
+    const dateFromNowStr = getDateFromNowString(message);
     const dateStr = getDateString(message);
     const subtitle = message?.subject || "";
     const icon = `mypro-icon mypro-icon-${getMessageIcon(message)}`;
-    return { ...message, titleLeading, dateStr, subtitle, titleTrailing, icon };
+    return { ...message, titleLeading, dateFromNowStr, dateStr, subtitle, titleTrailing, icon };
 };
 
 export default getEnrichedMessage;

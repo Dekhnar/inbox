@@ -17,7 +17,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     titleTrailing,
     subtitle,
     body: caption,
-    dateStr,
+    dateFromNowStr,
     icon,
     read,
   } = getEnrichedMessage(message);
@@ -60,7 +60,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
             </Text> */}
           </Column>
           <Text sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}>
-            {dateStr}
+            {dateFromNowStr}
           </Text>
         </Box>
       </Flex>
