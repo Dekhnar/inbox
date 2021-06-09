@@ -3,13 +3,32 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:client": "openapi --input ./api/schema.json --output ./api/",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "@theme-ui/presets": "^0.9.1",
     "next": "10.2.3",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-query": "^3.16.1",
+    "react-select-native": "^2.0.0",
+    "theme-ui": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@types/react": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-react": "^7.24.0",
+    "openapi-typescript-codegen": "^0.9.3",
+    "prettier": "^2.3.1",
+    "typescript": "^4.3.2"
   }
 }
