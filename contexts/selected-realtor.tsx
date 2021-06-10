@@ -10,7 +10,7 @@ export const SelectedRealtorContext = React.createContext(
   {} as ReturnType<typeof useSelectedRealtorContextProvider>
 );
 
-export const SelectedRealtorProvider: FC = (props) => {
+export const SelectedRealtorContextProvider: FC = (props) => {
   return (
     <SelectedRealtorContext.Provider
       value={useSelectedRealtorContextProvider()}
@@ -23,7 +23,7 @@ export const useSelectedRealtor = () => {
   const context = React.useContext(SelectedRealtorContext);
   if (context === undefined) {
     throw new Error(
-      `useSelectedRealtor must be used within a SelectedRealtorProvider`
+      `useSelectedRealtor must be used within a SelectedRealtorContextProvider`
     );
   }
   return context;

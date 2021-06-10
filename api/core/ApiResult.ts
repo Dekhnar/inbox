@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export type ApiResult = {
-    readonly url: string;
-    readonly ok: boolean;
-    readonly status: number;
-    readonly statusText: string;
-    readonly body: any;
-    readonly headers: any; //! https://github.com/ferdikoomen/openapi-typescript-codegen/issues/388
-}
+  readonly url: string;
+  readonly ok: boolean;
+  readonly status: number;
+  readonly statusText: string;
+  readonly body: any;
+  readonly headers: any; //! https://github.com/ferdikoomen/openapi-typescript-codegen/issues/388
+};

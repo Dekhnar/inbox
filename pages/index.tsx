@@ -9,20 +9,22 @@ import useRealtorsQuery from "@data/use-realtors.query";
 import { useEffect } from "react";
 import { useSelectedMessage } from "@contexts/selected_message";
 
-const RightPanel: React.FC = ({children}) => {
- const { message } = useSelectedMessage();
- return <div
-   sx={{
-     flex: "2 1 auto",
-     display: message ? "block" : "none",
-     "@media screen and (max-width: 749px)": {
-       display: "none",
-     },
-   }}
- >
-   { children }
- </div>;
-}
+const RightPanel: React.FC = ({ children }) => {
+  const { message: displayRightPanel } = useSelectedMessage();
+  return (
+    <div
+      sx={{
+        flex: "2 1 auto",
+        display: displayRightPanel ? "block" : "none",
+        "@media screen and (max-width: 749px)": {
+          display: "none",
+        },
+      }}
+    >
+      {displayRightPanel && children}
+    </div>
+  );
+};
 
 export default function Home() {
   const { data, isLoading: loading, isError, error } = useRealtorsQuery();

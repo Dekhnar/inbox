@@ -8,7 +8,7 @@ const theme = {
     secondary: "#1E91FF",
     background: "#F9F9F9",
     gray: "#D8D8D8",
-    "gray-800": "#777777"
+    "gray-800": "#777777",
   },
   containers: {
     navbar: {
@@ -31,7 +31,6 @@ const theme = {
         paddingX: 10,
         paddingY: 22,
         backgroundColor: "white",
-        
       },
       read: {
         height: "110px",

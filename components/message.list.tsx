@@ -6,6 +6,7 @@ import { Flex, Box, Divider, Text } from "theme-ui";
 import { Message } from "@api";
 import { useMessagesQuery } from "@data/use-messages.query";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
+import { useSelectedMessage } from "@contexts/selected_message";
 
 interface MessageListItemProps {
   message: Message;
@@ -16,19 +17,27 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     titleLeading,
     titleTrailing,
     subtitle,
-    body: caption,
+    body,
     dateFromNowStr,
     icon,
     read: isRead,
   } = getEnrichedMessage(message);
-  
+  const { setMessage } = useSelectedMessage();
+
   const dateColor = isRead ? "gray-800" : "primary";
   const titleColor = isRead ? "gray-800" : "black";
   const subtitleColor = isRead ? "gray-800" : "black";
 
+  const handleMessageView = () => {
+    return setMessage(message);
+  };
+
   return (
     <Box
-      variant={!isRead ? "containers.message.default" : "containers.message.read"}
+      variant={
+        !isRead ? "containers.message.default" : "containers.message.read"
+      }
+      onClick={handleMessageView}
     >
       <Flex sx={{ maxHeight: "100%" }}>
         <i
@@ -60,10 +69,13 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
                 overflow: "hidden",
               }}
             >
-              {caption}
+              {body}
             </Text> */}
           </Column>
-          <Text color={dateColor} sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}>
+          <Text
+            color={dateColor}
+            sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}
+          >
             {dateFromNowStr}
           </Text>
         </Box>
@@ -86,7 +98,7 @@ const MessageList = () => {
     return <Text>{"Sorry, No Message Found :("}</Text>;
   if (loading && !data?.messages) return <Text>Loading...</Text>;
 
-	const { data: messages, paginatorInfo } = data?.messages!;
+  const { data: messages, paginatorInfo } = data?.messages!;
 
   return (
     <div sx={{ borderRight: "1px #D8D8D8 solid" }}>
