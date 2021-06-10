@@ -11,6 +11,8 @@ Days.locale("fr");
 Days.updateLocale("fr", {
   calendar: {
     lastDay: "[Hier]",
+    nextDay: "D/M/YY",
+    lastWeek: "D/M/YY",
     sameDay: "h:mm",
     sameElse: "D/M/YY",
   },

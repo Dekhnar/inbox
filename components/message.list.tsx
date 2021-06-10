@@ -7,6 +7,7 @@ import { Message } from "@api";
 import { useMessagesQuery } from "@data/use-messages.query";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
 import { useSelectedMessage } from "@contexts/selected_message";
+import React from "react";
 
 interface MessageListItemProps {
   message: Message;
@@ -87,26 +88,36 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
 const MessageList = () => {
   const { realtor } = useSelectedRealtor();
   const {
-    data,
-    isLoading: loading,
+    isFetching: loading,
+    isFetchingNextPage: loadingMore,
+    fetchNextPage,
+    hasNextPage,
     isError,
+    data,
     error,
   } = useMessagesQuery(realtor.id!);
 
   if (isError && error) return <Text>Error</Text>;
-  if (!loading && !data?.messages)
+  if (!loading && !data?.pages?.[0]?.data?.length)
     return <Text>{"Sorry, No Message Found :("}</Text>;
-  if (loading && !data?.messages) return <Text>Loading...</Text>;
-
-  const { data: messages, paginatorInfo } = data?.messages!;
-
   return (
-    <div sx={{ borderRight: "1px #D8D8D8 solid" }}>
-      {messages?.map((message) => [
-        <MessageListItem key={message.id} message={message} />,
-        <Divider m="0" key={"$" + message.id} />,
-      ])}
-    </div>
+    <>
+      <div sx={{ borderRight: "1px #D8D8D8 solid", minHeight: "100%" }}>
+        {data?.pages.map((messages, _idx) => (
+          <React.Fragment key={_idx}>
+            {messages?.data?.map((message) => [
+              <MessageListItem key={message.id} message={message} />,
+              <Divider m="0" key={"$" + message.id} />,
+            ])}
+          </React.Fragment>
+        ))}
+      </div>
+      {hasNextPage && (
+        <Flex mt="8px" sx={{ justifyContent: "center" }}>
+          <Text>Loading...</Text>
+        </Flex>
+      )}
+    </>
   );
 };
 

@@ -4,20 +4,49 @@ import { Box, Card, Flex, Text } from "theme-ui";
 import Column from "@components/_base-column";
 import { useSelectedMessage } from "@contexts/selected_message";
 import getEnrichedMessage from "@utils/message";
+import useUpdateMessageMutation from "@data/use-message-mutation";
+import { useEffect } from "react";
+import { useSelectedRealtor } from "@contexts/selected-realtor";
+import { Message } from "@api";
 
 const MessageDetail: React.FC = () => {
   const iconSize = 20;
   const spaceBetweenIconAndTitle = 16;
   const paddingLeft = 32;
-  let { message } = useSelectedMessage();
+  const { message } = useSelectedMessage();
+  const { realtor } = useSelectedRealtor();
   const {
     titleLeading,
-    read,
     icon,
     contact: { email, phone } = {},
     dateStr,
     body,
   } = getEnrichedMessage(message!);
+  const { setMessage } = useSelectedMessage();
+  const { mutate: updateMessage } = useUpdateMessageMutation();
+
+  useEffect(() => {
+    updateMessage(
+      {
+        variables: {
+          messageId: message?.id!,
+          realtorId: realtor?.id!,
+          requestBody: {
+            read: true,
+          },
+        },
+      },
+      {
+        onSuccess: (data) => {
+          if (data.hasOwnProperty("id")) {
+            const message = data as Message;
+            setMessage(message);
+          }
+        },
+      }
+    );
+  }, [message?.id]);
+
   return (
     <Box
       variant="containers.page"
@@ -44,7 +73,7 @@ const MessageDetail: React.FC = () => {
                 <i
                   className={icon}
                   sx={{
-                    variant: read ? "icons.disabled" : "icons.enabled",
+                    variant: "icons.disabled",
                     marginRight: spaceBetweenIconAndTitle,
                     height: iconSize,
                     width: iconSize,

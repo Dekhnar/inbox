@@ -1,10 +1,10 @@
-import { Realtor, MessagesService } from "@api";
+import { Message, MessagesService } from "@api";
 import { useQuery } from "react-query";
 
 const useMessageQuery = (messageId: number, realtorId: number) => {
-  return useQuery<Realtor[], Error>(`MessagesService.getMessages`, async () => {
+  return useQuery<Message[], Error>(`MessagesService.getMessages`, async () => {
     const reponse = await MessagesService.getMessageByIds(messageId, realtorId);
-    return reponse as Realtor[];
+    return reponse as Message[];
   });
 };
 
