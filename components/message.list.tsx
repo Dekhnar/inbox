@@ -7,7 +7,7 @@ import { Message } from "@api";
 import { useMessagesQuery } from "@data/use-messages.query";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
 import { useSelectedMessage } from "@contexts/selected_message";
-import React from "react";
+import React, { useRef, useCallback } from "react";
 
 interface MessageListItemProps {
   message: Message;
@@ -97,20 +97,50 @@ const MessageList = () => {
     error,
   } = useMessagesQuery(realtor.id!);
 
+  const observer = useRef<IntersectionObserver>();
+  const lastMessageElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading || loadingMore) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (
+          entries[0].isIntersecting &&
+          hasNextPage &&
+          !loadingMore &&
+          !loading
+        )
+          fetchNextPage();
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasNextPage]
+  );
+
   if (isError && error) return <Text>Error</Text>;
   if (!loading && !data?.pages?.[0]?.data?.length)
     return <Text>{"Sorry, No Message Found :("}</Text>;
   return (
     <>
       <div sx={{ borderRight: "1px #D8D8D8 solid", minHeight: "100%" }}>
-        {data?.pages.map((messages, _idx) => (
-          <React.Fragment key={_idx}>
-            {messages?.data?.map((message) => [
-              <MessageListItem key={message.id} message={message} />,
-              <Divider m="0" key={"$" + message.id} />,
-            ])}
-          </React.Fragment>
-        ))}
+        {data?.pages.map((messages, _idx) => {
+          const isLastPage = data?.pages?.length === _idx + 1;
+          return (
+            <React.Fragment key={_idx}>
+              {messages?.data?.map((message, index) => {
+                return [
+                  isLastPage && messages?.data?.length === index + 1 ? (
+                    <div ref={lastMessageElementRef} key={message.id}>
+                      <MessageListItem message={message} />
+                    </div>
+                  ) : (
+                    <MessageListItem key={message.id} message={message} />
+                  ),
+                  <Divider m="0" key={"$" + message.id} />,
+                ];
+              })}
+            </React.Fragment>
+          );
+        })}
       </div>
       {hasNextPage && (
         <Flex mt="8px" sx={{ justifyContent: "center" }}>

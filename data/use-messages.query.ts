@@ -16,7 +16,6 @@ const getMessagesByRealtorId = async ({
 }: QueryFunctionContext): Promise<PaginatedMessages> => {
   const [_key, params] = queryKey;
   const  realtorId = params as number;
-  debugger;
   const paginator = (pageParam || {}) as PaginationMetadata;
   const result = await request({
     method: "GET",
@@ -32,7 +31,7 @@ const getMessagesByRealtorId = async ({
     },
   });
   const { body: data, headers } = result;
-  const paginatorInfo = JSON.parse(
+  let paginatorInfo = JSON.parse(
     headers.get("x-pagination")
   ) as PaginationMetadata;
   return { data, paginatorInfo  };
@@ -43,7 +42,9 @@ export const useMessagesQuery = (id: number) => {
     [`MessagesService.getMessages`, id],
     getMessagesByRealtorId,
     {
-      getNextPageParam: ({ paginatorInfo }) => paginatorInfo,
+      getNextPageParam: ({ paginatorInfo }) => {
+        return paginatorInfo.total_pages != paginatorInfo.page ? paginatorInfo: undefined;
+      },
     }
   );
 };
