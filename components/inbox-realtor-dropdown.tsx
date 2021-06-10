@@ -1,25 +1,42 @@
+import { useSelectedRealtor } from "@contexts/selected-realtor";
 import useRealtorsQuery from "@data/use-realtors.query";
-import Select from "react-select-native";
+import { useEffect, useState } from "react";
 
 const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
   const { data, isLoading, isError } = useRealtorsQuery();
+  const { realtor, setRealtor } = useSelectedRealtor();
+
   const isNotVisible = isLoading || isError;
+  const isVisible = !isNotVisible;
+
+  useEffect(() => {
+    if (isVisible && data) setRealtor(data[0]);
+  }, [data]);
 
   if (isNotVisible || !data) return <div />;
 
-  const options = data.map(({ name, id }) => ({
-    value: "Agence" + (name || "Unvailable"),
-    label: id || "Unvailable",
+  const options = data.map((value) => ({
+    value: value?.id!,
+    label: "Agence " + value?.id!,
   }));
 
   return (
     <div>
-      <Select
-        // onChange={(e) => handleChange(e)}
-        options={options}
-        value="ebin"
-        defaultValue={options[0].value}
-      />
+      <select
+        value={realtor ? options.find(r => r.value === realtor.id)?.value : options[0].value}
+        onChange={(e) => {
+          e.preventDefault();
+          const id = e.target.value;
+          const realtor = data.find((d) => d?.id === parseInt(id));
+          setRealtor(realtor!);
+        }}
+      >
+        {options.map((option, index) => (
+          <option key={index} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
