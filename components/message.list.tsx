@@ -25,9 +25,9 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
   } = getEnrichedMessage(message);
   const { setMessage } = useSelectedMessage();
 
-  const dateColor = isRead ? "gray-800" : "primary";
-  const titleColor = isRead ? "gray-800" : "black";
-  const subtitleColor = isRead ? "gray-800" : "black";
+  const dateColor = isRead ? "gray-600" : "primary";
+  const titleColor = isRead ? "gray-600" : "black";
+  const subtitleColor = isRead ? "gray-600" : "black";
 
   const handleMessageView = () => {
     return setMessage(message);
@@ -121,7 +121,14 @@ const MessageList = () => {
     return <Text>{"Sorry, No Message Found :("}</Text>;
   return (
     <>
-      <div sx={{ borderRight: "1px #D8D8D8 solid", minHeight: "100%" }}>
+      <div
+        sx={{
+          borderRight: "1px #D8D8D8 solid",
+          maxHeight: "calc(100vh - 60px)",
+          overflowX: "hidden",
+          overflowY: "auto",
+        }}
+      >
         {data?.pages.map((messages, _idx) => {
           const isLastPage = data?.pages?.length === _idx + 1;
           return (

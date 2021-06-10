@@ -40,7 +40,7 @@ const InboxView: React.FC = () => {
    return (
      <>
        <InboxHeader />
-       <Flex sx={{ pt: 60 }}>
+       <Flex sx={{ pt: 60, height: 'calc(100vh - 60px)' }}>
          <div sx={{ flex: "1 1 auto" }}>
            <MessageList />
          </div>
