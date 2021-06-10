@@ -1,11 +1,11 @@
 /** @jsxImportSource theme-ui */
 
+import Column from "@components/_base-column";
+import getEnrichedMessage from "@utils/message";
 import { Flex, Box, Divider, Text } from "theme-ui";
 import { Message } from "@api";
 import { useMessagesQuery } from "@data/use-messages.query";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
-import Column from "@components/_base-column";
-import getEnrichedMessage from "@utils/message";
 
 interface MessageListItemProps {
   message: Message;
@@ -75,16 +75,18 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
 const MessageList = () => {
   const { realtor } = useSelectedRealtor();
   const {
-    data: messages,
+    data,
     isLoading: loading,
     isError,
     error,
-  } = useMessagesQuery(realtor?.id ?? -1);
+  } = useMessagesQuery(realtor.id!);
 
   if (isError && error) return <Text>Error</Text>;
-  if (!loading && !messages?.length)
+  if (!loading && !data?.messages)
     return <Text>{"Sorry, No Message Found :("}</Text>;
-  if (loading && !messages?.length) return <Text>Loading...</Text>;
+  if (loading && !data?.messages) return <Text>Loading...</Text>;
+
+	const { data: messages, paginatorInfo } = data?.messages!;
 
   return (
     <div sx={{ borderRight: "1px #D8D8D8 solid" }}>

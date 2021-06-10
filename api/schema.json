@@ -206,6 +206,7 @@
         },
         "summary": "Get one message by ID.",
         "description": "Returns a single message\n404 if realtor is not found\n404 if message is not found",
+        "operationId": "getMessageByIds",
         "tags": ["messages"]
       },
       "patch": {

@@ -3,8 +3,8 @@
 /* eslint-disable */
 
 export type Realtor = {
-  readonly id?: number;
-  name?: string;
-  unread_messages?: number;
-  logo?: string;
-};
+    readonly id?: number;
+    name?: string;
+    unread_messages?: number;
+    logo?: string;
+}

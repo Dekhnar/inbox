@@ -1,22 +1,21 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ApiRequestOptions } from "./ApiRequestOptions";
-import type { ApiResult } from "./ApiResult";
-import { OpenAPI } from "./OpenAPI";
-
 export async function request(options: ApiRequestOptions): Promise<ApiResult> {
-  const url = `${OpenAPI.BASE}${options.path}`;
+  const url = getUrl(options);
+  const response = await sendRequest(options, url);
+  const responseBody = await getResponseBody(response);
+  const responseHeader = getResponseHeader(response, options.responseHeader);
 
-  // Do your request...
-
-  return {
+  const result: ApiResult = {
     url,
-    ok: true,
-    status: 200,
-    statusText: "dummy",
-    body: {
-      ...options,
-    },
+    ok: response.ok,
+    status: response.status,
+    statusText: response.statusText,
+    body: responseHeader,
+    header: responseHeader,
   };
+
+  catchErrors(options, result);
+  return result;
 }
