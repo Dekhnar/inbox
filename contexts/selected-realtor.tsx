@@ -2,7 +2,7 @@ import { Realtor } from "@api";
 import React, { FC, useMemo, useState } from "react";
 
 const useSelectedRealtorContextProvider = () => {
-  const [realtor, setRealtor] = useState<Realtor>({});
+  const [realtor, setRealtor] = useState<Realtor>();
   return useMemo(() => ({ realtor, setRealtor }), [realtor]);
 };
 

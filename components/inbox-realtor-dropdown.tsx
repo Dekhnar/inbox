@@ -1,17 +1,10 @@
 import { useSelectedRealtor } from "@contexts/selected-realtor";
 import useRealtorsQuery from "@data/use-realtors.query";
-import { useEffect } from "react";
 
 const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
   const { data, isLoading, isError } = useRealtorsQuery();
   const { realtor, setRealtor } = useSelectedRealtor();
-
   const isNotVisible = isLoading || isError;
-  const isVisible = !isNotVisible;
-
-  useEffect(() => {
-    if (isVisible && data) setRealtor(data[0]);
-  }, [data]);
 
   if (isNotVisible || !data) return <div />;
 

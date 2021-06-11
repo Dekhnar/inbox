@@ -9,6 +9,7 @@ import { Message, Realtor } from "@api";
 import { useEffect } from "react";
 import { useSelectedMessage } from "@contexts/selected_message";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
+import { useRouter } from "next/router";
 
 export interface InboxViewProps {
   currentRealtor?: Realtor;
@@ -26,15 +27,33 @@ const InboxView: React.FC<InboxViewProps> = ({
     error,
   } = useRealtorsQuery();
   const { realtor, setRealtor } = useSelectedRealtor();
-  const { setMessage } = useSelectedMessage();
+  const { message, setMessage } = useSelectedMessage();
   const noRealtorSelectedYet = !realtor?.id;
 
+  const router = useRouter();
   useEffect(() => {
-    if (realtors?.length && noRealtorSelectedYet) {
-      setRealtor(currentRealtor ?? realtors[0]);
-      if (currentMessage) setMessage(currentMessage);
+    setRealtor(currentRealtor);
+    setMessage(currentMessage);
+  }, []);
+
+  useEffect(() => {
+    if (noRealtorSelectedYet) setRealtor(currentRealtor ?? realtors![0]);
+  }, [realtors?.length]);
+
+  useEffect(() => {
+    if (realtor?.id) {
+      const currentPath = router.asPath;
+      let path = `/${realtor.id.toString()}`;
+      if (message?.id) path = `${path}/${message.id.toString()}`;
+      if (path != currentPath) {
+        if (currentPath == "/") {
+          router.replace(path);
+        } else {
+          router.push(path);
+        }
+      }
     }
-  }, [realtors]);
+  }, [realtor, message]);
 
   if (isError && error) return <Text>Error</Text>;
   if (loading || noRealtorSelectedYet) return <Text>Loading...</Text>;

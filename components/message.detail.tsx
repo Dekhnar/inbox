@@ -1,13 +1,13 @@
 /** @jsxImportSource theme-ui */
 
-import { Box, Card, Flex, Text } from "theme-ui";
 import Column from "@components/_base-column";
-import { useSelectedMessage } from "@contexts/selected_message";
 import getEnrichedMessage from "@utils/message";
 import useUpdateMessageMutation from "@data/use-message-mutation";
-import { useEffect } from "react";
-import { useSelectedRealtor } from "@contexts/selected-realtor";
+import { Box, Card, Flex, Text } from "theme-ui";
 import { Message } from "@api";
+import { useEffect } from "react";
+import { useSelectedMessage } from "@contexts/selected_message";
+import { useSelectedRealtor } from "@contexts/selected-realtor";
 
 const MessageDetail: React.FC = () => {
   const iconSize = 20;
@@ -56,7 +56,7 @@ const MessageDetail: React.FC = () => {
       paddingBottom="33px"
       sx={{ height: "100%" }}
     >
-      <Column>
+      <Column sx={{ height: "100%" }}>
         <Card
           sx={{
             variant: "containers.card",
@@ -107,7 +107,7 @@ const MessageDetail: React.FC = () => {
         <Card
           sx={{
             variant: "containers.card",
-            minHeight: "637px",
+            height: "100%",
             flexGrow: 2,
             paddingLeft,
             paddingTop: "28px",
@@ -120,7 +120,6 @@ const MessageDetail: React.FC = () => {
             <Text sx={{ width: "100%", marginTop: 45 }}>{body}</Text>
           </Column>
         </Card>
-        <Box sx={{ height: 1 }} />
       </Column>
     </Box>
   );

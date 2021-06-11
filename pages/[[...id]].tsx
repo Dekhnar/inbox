@@ -77,6 +77,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
     }
 
+    console.log(currentMessage);
+
     return {
       props: {
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
