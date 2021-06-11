@@ -21,8 +21,9 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     dateFromNowStr,
     icon,
     read: isRead,
+    truncatedBody,
   } = getEnrichedMessage(message);
-  const { message: selectedMessage ,setMessage } = useSelectedMessage();
+  const { message: selectedMessage, setMessage } = useSelectedMessage();
   const isSelectedMessage = selectedMessage?.id == message.id;
 
   const readColor = "gray-700";
@@ -94,7 +95,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
             <Text as="p" variant="text.bodyText2" color={subtitleStyle.color}>
               {subtitle}
             </Text>
-            {/* <Text
+            <Text
               as="p"
               variant="text.bodyText2"
               sx={{
@@ -104,13 +105,13 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
                 overflow: "hidden",
               }}
             >
-              {body}
-            </Text> */}
+              {truncatedBody}
+            </Text>
           </Column>
           <Text
             color={dateColor}
             variant="text.bodyText2"
-            sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}
+            sx={{ position: "absolute", right: 0, top: 0 }}
           >
             {dateFromNowStr}
           </Text>

@@ -45,7 +45,7 @@ const InboxView: React.FC<InboxViewProps> = ({
     if (realtor?.id) {
       const currentPath = router.asPath;
       let path = `/${realtor.id.toString()}`;
-      if (message?.id) path = `${path}/${message.id.toString()}`;
+      if (message?.id) path = currentPath.includes(realtor.id.toString()) ? `${path}/${message.id.toString()}` : path;
       if (path != currentPath) {
         if (currentPath == "/") {
           router.replace(path);

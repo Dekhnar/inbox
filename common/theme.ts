@@ -66,27 +66,27 @@ const theme = {
     ...roboto.styles,
     p: {
       ...roboto.styles.p,
-      fontSize: '14px',
-    }
+      fontSize: "14px",
+    },
   },
   text: {
     headline: {
       ...roboto.styles.h6,
-      fontSize: '18px',
+      fontSize: "18px",
     },
     subtitle: {
       ...roboto.styles.p,
-      fontSize: '16px',
+      fontSize: "16px",
     },
     bodyText1: {
       ...roboto.styles.p,
-      fontSize: '16px',
+      fontSize: "16px",
     },
     bodyText2: {
       ...roboto.styles.p,
-      fontSize: '14px',
-    }
-  }
+      fontSize: "14px",
+    },
+  },
 };
 
 export default theme;

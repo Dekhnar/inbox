@@ -88,8 +88,16 @@ const MessageDetail: React.FC = () => {
                     marginRight: "116px",
                   }}
                 >
-                  {email && <Text variant="text.subtitle" color="black-400">Email</Text>}
-                  {phone && <Text variant="text.subtitle" color="black-400">Téléphone</Text>}
+                  {email && (
+                    <Text variant="text.subtitle" color="black-400">
+                      Email
+                    </Text>
+                  )}
+                  {phone && (
+                    <Text variant="text.subtitle" color="black-400">
+                      Téléphone
+                    </Text>
+                  )}
                 </Column>
                 <Column
                   sx={{
@@ -128,7 +136,8 @@ const MessageDetail: React.FC = () => {
               {dateStr}
             </Text>
             <Text
-              variant="text.bodyText1" color="black-400"
+              variant="text.bodyText1"
+              color="black-400"
               sx={{ width: "100%", marginTop: 45 }}
             >
               {body}

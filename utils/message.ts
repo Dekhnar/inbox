@@ -1,16 +1,15 @@
 import { Message } from "@api";
-import Days from "dayjs";
 import "dayjs/locale/fr";
 import updateLocale from "dayjs/plugin/updateLocale";
 import calendar from "dayjs/plugin/calendar";
 import dayjs from "dayjs";
 
-Days.extend(updateLocale);
-Days.extend(calendar);
-Days.locale("fr");
-Days.updateLocale("fr", {
+dayjs.extend(updateLocale);
+dayjs.extend(calendar);
+dayjs.locale("fr");
+dayjs.updateLocale("fr", {
   calendar: {
-    lastDay: "[Hier]",
+    lastDay: "D/M/YY",
     nextDay: "D/M/YY",
     lastWeek: "D/M/YY",
     sameDay: "h:mm",
@@ -54,6 +53,16 @@ const getDateString = (message: Message) => {
   return dayjs(message.date).format("d MMM YYYY à h:mm");
 };
 
+const getSubtitle = (message: Message) => {
+  return message?.type === "phone"
+    ? "Message vocal sur votre vitrine Meilleurs Agents"
+    : message.subject!;
+};
+
+const getBody = (message: Message) => {
+  return message?.type === "phone" ? message.subject! : message.body!;
+};
+
 const getEnrichedMessage = (
   message: Message
 ): Message & {
@@ -63,6 +72,7 @@ const getEnrichedMessage = (
   dateStr: string;
   titleTrailing: string;
   icon: string;
+  truncatedBody: string;
 } => {
   const titleLeading = getMessageTitle(message);
   const phone = message?.contact?.phone;
@@ -70,7 +80,8 @@ const getEnrichedMessage = (
     titleLeading && phone && titleLeading != phone ? `(${phone})` : "";
   const dateFromNowStr = getDateFromNowString(message);
   const dateStr = getDateString(message);
-  const subtitle = message?.subject || "";
+  const subtitle = getSubtitle(message);
+  const truncatedBody = getBody(message);
   const icon = `mypro-icon mypro-icon-${getMessageIcon(message)}`;
   return {
     ...message,
@@ -80,6 +91,7 @@ const getEnrichedMessage = (
     subtitle,
     titleTrailing,
     icon,
+    truncatedBody,
   };
 };
 
