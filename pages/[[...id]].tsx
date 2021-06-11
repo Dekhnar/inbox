@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const queryClient = new QueryClient();
   const paramsSize = ids.length;
   const staleTime = 10 * 1000;
-  let currentRealtor, currentMessage;
+  let defaultRealtor, defaultMessage;
 
   if (paramsSize >= 3) {
     return {
@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         `RealtorsService.getRealtors`,
         fetchRealtors
       );
-      currentRealtor = queryClient
+      defaultRealtor = queryClient
         .getQueryData<Realtor[]>(`RealtorsService.getRealtors`)
         ?.find((r) => r.id == realtorId);
       if (paramsSize > 1) {
@@ -70,7 +70,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             staleTime,
           }
         );
-        currentMessage = queryClient.getQueryData<Message>([
+        defaultMessage = queryClient.getQueryData<Message>([
           `MessagesService.getMessageByIds`,
           { messageId, realtorId },
         ]);
@@ -81,11 +81,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       props: {
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
         content: {
-          ...(currentMessage && {
-            currentMessage: JSON.parse(JSON.stringify(currentMessage)),
+          ...(defaultMessage && {
+            defaultMessage: JSON.parse(JSON.stringify(defaultMessage)),
           }),
-          ...(currentRealtor && {
-            currentRealtor: JSON.parse(JSON.stringify(currentRealtor)),
+          ...(defaultRealtor && {
+            defaultRealtor: JSON.parse(JSON.stringify(defaultRealtor)),
           }),
         },
       },

@@ -4,17 +4,18 @@ import Column from "@components/_base-column";
 import getEnrichedMessage from "@utils/message";
 import useUpdateMessageMutation from "@data/use-message-mutation";
 import { Box, Card, Flex, Text } from "theme-ui";
-import { Message } from "@api";
+import { Message, Realtor } from "@api";
 import { useEffect } from "react";
 import { useSelectedMessage } from "@contexts/selected_message";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
+import { useQueryClient } from "react-query";
 
 const MessageDetail: React.FC = () => {
   const iconSize = 20;
   const spaceBetweenIconAndTitle = 16;
   const paddingLeft = 32;
   const { message } = useSelectedMessage();
-  const { realtor } = useSelectedRealtor();
+  const { realtor, setRealtor } = useSelectedRealtor();
   const {
     titleLeading,
     icon,
@@ -24,27 +25,33 @@ const MessageDetail: React.FC = () => {
   } = getEnrichedMessage(message!);
   const { setMessage } = useSelectedMessage();
   const { mutate: updateMessage } = useUpdateMessageMutation();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    updateMessage(
-      {
-        variables: {
-          messageId: message?.id!,
-          realtorId: realtor?.id!,
-          requestBody: {
-            read: true,
+    if (!message?.read)
+      updateMessage(
+        {
+          variables: {
+            messageId: message?.id!,
+            realtorId: realtor?.id!,
+            requestBody: {
+              read: true,
+            },
           },
         },
-      },
-      {
-        onSuccess: (data) => {
-          if (data.hasOwnProperty("id")) {
-            const message = data as Message;
-            setMessage(message);
-          }
-        },
-      }
-    );
+        {
+          onSuccess: (data) => {
+            if (data.hasOwnProperty("id")) {
+              const message = data as Message;
+              setMessage(message);
+              const newRealtor = queryClient
+                .getQueryData<Realtor[]>(`RealtorsService.getRealtors`)
+                ?.find((r) => r.id == realtor?.id);
+              setRealtor(newRealtor);
+            }
+          },
+        }
+      );
   }, [message?.id]);
 
   return (

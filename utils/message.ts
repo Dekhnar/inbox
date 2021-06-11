@@ -51,7 +51,7 @@ const getDateFromNowString = (message: Message) => {
 };
 
 const getDateString = (message: Message) => {
-  return Dayjs(message.date).format("d MMM YYYY à h:mm");
+  return Dayjs(message.date).format("D MMM YYYY à h:mm");
 };
 
 const getSubtitle = (message: Message) => {

@@ -60,7 +60,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
           ? "containers.message.read"
           : "containers.message.default",
       }}
-      aria-aria-labelledby={message?.id?.toString()}
+      aria-labelledby={message?.id?.toString()}
       id={message?.id?.toString()}
       tabIndex={0}
       onKeyPress={handleKeyPress}
@@ -114,8 +114,8 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
               }}
               css={{
                 display: "-webkit-box",
-                "-webkit-line-clamp": "2",
-                "-webkit-box-orient": "vertical",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
               }}
             >
               {truncatedBody}
@@ -197,7 +197,7 @@ const MessageList = () => {
                       <MessageListItem message={message} />
                     </div>
                   ),
-                  <Divider m="0" key={"$" + message.id} />,
+                  <Divider m="0" key={"divider-" + message.id} />,
                 ];
               })
               // messages?.data && <MessageListItem message={messages?.data[0]} />

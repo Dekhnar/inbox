@@ -10,10 +10,12 @@ import { useEffect } from "react";
 import { useSelectedMessage } from "@contexts/selected_message";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
 import { useRouter } from "next/router";
+import { InfiniteData, useQueryClient } from "react-query";
+import { PaginatedMessages } from "@data/use-messages.query";
 
 export interface InboxViewProps {
-  currentRealtor?: Realtor;
-  currentMessage?: Message;
+  defaultRealtor?: Realtor;
+  defaultMessage?: Message;
 }
 
 const RightPanel: React.FC = ({ children }) => {
@@ -49,8 +51,8 @@ const LeftPanel: React.FC = ({ children }) => {
 };
 
 const InboxView: React.FC<InboxViewProps> = ({
-  currentMessage,
-  currentRealtor,
+  defaultMessage,
+  defaultRealtor,
 }) => {
   const {
     data: realtors,
@@ -61,16 +63,58 @@ const InboxView: React.FC<InboxViewProps> = ({
   const { realtor, setRealtor } = useSelectedRealtor();
   const { message, setMessage } = useSelectedMessage();
   const noRealtorSelectedYet = !realtor?.id;
+  const queryClient = useQueryClient();
 
   const router = useRouter();
   useEffect(() => {
-    setRealtor(currentRealtor);
-    setMessage(currentMessage);
+    setRealtor(defaultRealtor);
+    setMessage(defaultMessage);
+  }, []);
+
+  useEffect(() => {
+    // Mangage nvaigation back
+    const path = router.asPath;
+    const ids = path.split("/");
+    ids.shift();
+
+    const hasRealtorId = !!(ids.length && ids[0]);
+    const hasMessageId = !!(ids.length > 1 && ids[1]);
+
+    const realtorId = parseInt(ids[0]);
+    if (hasRealtorId) {
+      const newRealtor = queryClient
+        .getQueryData<Realtor[]>(`RealtorsService.getRealtors`)
+        ?.find((r) => r.id == realtorId);
+      setRealtor(newRealtor);
+    } else {
+      setRealtor(undefined);
+    }
+
+    if (hasMessageId) {
+      const newMessageId = parseInt(ids[1]);
+      const data = queryClient.getQueryData<InfiniteData<PaginatedMessages>>([
+        `MessagesService.getMessages`,
+        realtorId,
+      ]);
+      let newMessage;
+      data?.pages?.find((p) => {
+        return p.data.find((m) => {
+          if (m.id == newMessageId) {
+            newMessage = m;
+            return true;
+          }
+          return false;
+        });
+      });
+      setMessage(newMessage);
+    } else {
+      setMessage(undefined);
+    }
   }, [router]);
 
   useEffect(() => {
     if (realtors?.length && noRealtorSelectedYet)
-      setRealtor(currentRealtor ?? realtors![0]);
+      setRealtor(defaultRealtor ?? realtors![0]);
   }, [realtors?.length]);
 
   useEffect(() => {
@@ -84,7 +128,11 @@ const InboxView: React.FC<InboxViewProps> = ({
       if (path != currentPath) {
         if (currentPath == "/") {
           router.replace(path);
+        } else if (currentPath.includes(realtor.id.toString())) {
+          // We select the same realtor but a new message
+          router.push(path, undefined, { shallow: true });
         } else {
+          // We select a new realtor
           router.push(path);
         }
       }
