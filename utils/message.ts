@@ -1,21 +1,22 @@
-import { Message } from "@api";
 import "dayjs/locale/fr";
-import updateLocale from "dayjs/plugin/updateLocale";
+import Dayjs from 'dayjs';
 import calendar from "dayjs/plugin/calendar";
-import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
+import { Message } from "@api";
 
-dayjs.extend(updateLocale);
-dayjs.extend(calendar);
-dayjs.locale("fr");
-dayjs.updateLocale("fr", {
+Dayjs.extend(updateLocale);
+Dayjs.extend(calendar);
+Dayjs.updateLocale('fr', {
   calendar: {
-    lastDay: "D/M/YY",
-    nextDay: "D/M/YY",
-    lastWeek: "D/M/YY",
+    lastDay: '[Hier]',
+    lastWeek: 'dddd',
+    nextWeek: 'dddd',
     sameDay: "h:mm",
     sameElse: "D/M/YY",
   },
 });
+Dayjs.locale("fr");
+
 
 const getUserFullName = ({
   firstname,
@@ -45,12 +46,12 @@ const getMessageIcon = (message: Message) => {
 };
 
 const getDateFromNowString = (message: Message) => {
-  const formattedDate = dayjs().calendar(dayjs(message.date));
+  const formattedDate = Dayjs(message.date).calendar();
   return formattedDate;
 };
 
 const getDateString = (message: Message) => {
-  return dayjs(message.date).format("d MMM YYYY à h:mm");
+  return Dayjs(message.date).format("d MMM YYYY à h:mm");
 };
 
 const getSubtitle = (message: Message) => {
