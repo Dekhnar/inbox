@@ -1,6 +1,6 @@
 import { useSelectedRealtor } from "@contexts/selected-realtor";
 import useRealtorsQuery from "@data/use-realtors.query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
   const { data, isLoading, isError } = useRealtorsQuery();

@@ -5,7 +5,7 @@ import { QueryFunctionContext, useInfiniteQuery } from "react-query";
 //! Have to create this method due to none support of headers yet
 //! https://github.com/ferdikoomen/openapi-typescript-codegen/issues/388
 
-type PaginatedMessages = {
+export type PaginatedMessages = {
   data: Message[];
   paginatorInfo: PaginationMetadata;
 };
