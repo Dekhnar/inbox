@@ -2,12 +2,12 @@
 
 import Column from "@components/_base-column";
 import getEnrichedMessage from "@utils/message";
-import { Flex, Box, Divider, Text } from "theme-ui";
+import { Flex, Divider, Text } from "theme-ui";
 import { Message } from "@api";
 import { useMessagesQuery } from "@data/use-messages.query";
 import { useSelectedRealtor } from "@contexts/selected-realtor";
 import { useSelectedMessage } from "@contexts/selected_message";
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, KeyboardEvent } from "react";
 
 interface MessageListItemProps {
   message: Message;
@@ -49,13 +49,21 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     return setMessage(message);
   };
 
+  const handleKeyPress = (event: KeyboardEvent<HTMLLIElement>) => {
+    if (event.key === "Enter") handleMessageView();
+  }
+
   return (
-    <Box
-      variant={
-        isSelectedMessage
+    <li
+      sx={{
+        variant: isSelectedMessage
           ? "containers.message.read"
-          : "containers.message.default"
-      }
+          : "containers.message.default",
+      }}
+      aria-aria-labelledby={message?.id?.toString()}
+      id={message?.id?.toString()}
+      tabIndex={0}
+      onKeyPress={handleKeyPress}
       onClick={handleMessageView}
     >
       <Flex sx={{ maxHeight: "100%" }}>
@@ -122,7 +130,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
           </Text>
         </div>
       </Flex>
-    </Box>
+    </li>
   );
 };
 
@@ -161,12 +169,16 @@ const MessageList = () => {
   if (!loading && !data?.pages?.[0]?.data?.length)
     return <Text>{"Sorry, No Message Found :("}</Text>;
   return (
-    <div
+    <ul
       sx={{
         borderRight: "1px #D8D8D8 solid",
         maxHeight: "calc(100vh - 60px)",
         overflowX: "hidden",
         overflowY: "auto",
+
+        listStyle: "none",
+        margin: "0px",
+        padding: "0px",
       }}
     >
       {data?.pages.map((messages, _idx) => {
@@ -181,7 +193,9 @@ const MessageList = () => {
                       <MessageListItem message={message} />
                     </div>
                   ) : (
-                    <MessageListItem key={message.id} message={message} />
+                    <div key={message.id}>
+                      <MessageListItem message={message} />
+                    </div>
                   ),
                   <Divider m="0" key={"$" + message.id} />,
                 ];
@@ -196,7 +210,7 @@ const MessageList = () => {
           <Text>Loading...</Text>
         </Flex>
       )}
-    </div>
+    </ul>
   );
 };
 

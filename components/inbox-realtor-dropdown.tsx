@@ -14,27 +14,26 @@ const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
   }));
 
   return (
-    <div>
-      <select
-        value={
-          realtor
-            ? options.find((r) => r.value === realtor.id)?.value
-            : options[0].value
-        }
-        onChange={(e) => {
-          e.preventDefault();
-          const id = e.target.value;
-          const realtor = data.find((d) => d?.id === parseInt(id));
-          setRealtor(realtor!);
-        }}
-      >
-        {options.map((option, index) => (
-          <option key={index} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      aria-label="Selectioner une agence"
+      value={
+        realtor
+          ? options.find((r) => r.value === realtor.id)?.value
+          : options[0].value
+      }
+      onChange={(e) => {
+        e.preventDefault();
+        const id = e.target.value;
+        const realtor = data.find((d) => d?.id === parseInt(id));
+        setRealtor(realtor!);
+      }}
+    >
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
   );
 };
 

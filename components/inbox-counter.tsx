@@ -27,6 +27,8 @@ const InboxCounter: React.FC<React.SVGAttributes<{}>> = () => {
   const hasUnread = unreadCount > 0;
   return (
     <Box
+      aria-label={`Boîte de réception ${unreadCount} messages non lus`}
+      tabIndex={0}
       variant={
         hasUnread ? "containers.counter.enabled" : "containers.counter.disabled"
       }
