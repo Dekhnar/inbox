@@ -11,6 +11,7 @@ import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 
 // This function gets called at build time
+// Getting path at build time
 export async function getStaticPaths() {
   const realtors = (await RealtorsService.getRealtors()) as Realtor[];
   // Get the paths we want to pre-render based on types
@@ -18,72 +19,79 @@ export async function getStaticPaths() {
     params: { id: [realtor?.id?.toString()] },
   }));
   // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  console.log("here");
+  // usefull for not generate all the paths at once and do them at runtime
+  // whenever use tries to do a request to the page
   return {
     paths: [{ params: { id: null } }, ...paths],
-    fallback: false,
+    fallback: true,
   };
 }
 
+// Getting data that matches that path
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!params?.id)
     return {
       props: {},
     };
   const ids = params?.id as string[];
-
   const queryClient = new QueryClient();
   const paramsSize = ids.length;
   const staleTime = 10 * 1000;
   let currentRealtor, currentMessage;
-  if (paramsSize > 0) {
-    const realtorId = parseInt(ids[0]);
-    await queryClient.prefetchQuery<Realtor[], Error>(
-      `RealtorsService.getRealtors`,
-      fetchRealtors
-    );
-    currentRealtor = queryClient
-      .getQueryData<Realtor[]>(`RealtorsService.getRealtors`)
-      ?.find((r) => r.id == realtorId);
-    if (paramsSize > 1) {
-      const messageId = parseInt(ids[1]);
-      await queryClient.prefetchInfiniteQuery(
-        [`MessagesService.getMessages`, realtorId],
-        getMessagesByRealtorId,
-        {
-          staleTime,
-        }
-      );
 
-      await queryClient.prefetchQuery(
-        [`MessagesService.getMessageByIds`, { messageId, realtorId }],
-        fetchMessageByIds,
-        {
-          staleTime,
-        }
+  if (paramsSize >= 3) {
+    return {
+      notFound: true,
+    };
+  } else {
+    if (paramsSize > 0) {
+      const realtorId = parseInt(ids[0]);
+      await queryClient.prefetchQuery<Realtor[], Error>(
+        `RealtorsService.getRealtors`,
+        fetchRealtors
       );
-      currentMessage = queryClient.getQueryData<Message>([
-        `MessagesService.getMessageByIds`,
-        { messageId, realtorId },
-      ]);
+      currentRealtor = queryClient
+        .getQueryData<Realtor[]>(`RealtorsService.getRealtors`)
+        ?.find((r) => r.id == realtorId);
+      if (paramsSize > 1) {
+        const messageId = parseInt(ids[1]);
+        await queryClient.prefetchInfiniteQuery(
+          [`MessagesService.getMessages`, realtorId],
+          getMessagesByRealtorId,
+          {
+            staleTime,
+          }
+        );
+
+        await queryClient.prefetchQuery(
+          [`MessagesService.getMessageByIds`, { messageId, realtorId }],
+          fetchMessageByIds,
+          {
+            staleTime,
+          }
+        );
+        currentMessage = queryClient.getQueryData<Message>([
+          `MessagesService.getMessageByIds`,
+          { messageId, realtorId },
+        ]);
+      }
     }
-  }
 
-  return {
-    props: {
-      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-      content: {
-        ...(currentMessage && {
-          currentMessage: JSON.parse(JSON.stringify(currentMessage)),
-        }),
-        ...(currentRealtor && {
-          currentRealtor: JSON.parse(JSON.stringify(currentRealtor)),
-        }),
+    return {
+      props: {
+        dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+        content: {
+          ...(currentMessage && {
+            currentMessage: JSON.parse(JSON.stringify(currentMessage)),
+          }),
+          ...(currentRealtor && {
+            currentRealtor: JSON.parse(JSON.stringify(currentRealtor)),
+          }),
+        },
       },
-    },
-    revalidate: 60,
-  };
+      revalidate: 60,
+    };
+  }
 };
 
 export default function HomePage(props: {
