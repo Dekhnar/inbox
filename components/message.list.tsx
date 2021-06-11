@@ -161,44 +161,42 @@ const MessageList = () => {
   if (!loading && !data?.pages?.[0]?.data?.length)
     return <Text>{"Sorry, No Message Found :("}</Text>;
   return (
-    <>
-      <div
-        sx={{
-          borderRight: "1px #D8D8D8 solid",
-          maxHeight: "calc(100vh - 60px)",
-          overflowX: "hidden",
-          overflowY: "auto",
-        }}
-      >
-        {data?.pages.map((messages, _idx) => {
-          const isLastPage = data?.pages?.length === _idx + 1;
-          return (
-            <React.Fragment key={_idx}>
-              {
-                messages?.data?.map((message, index) => {
-                  return [
-                    isLastPage && messages?.data?.length === index + 1 ? (
-                      <div ref={lastMessageElementRef} key={message.id}>
-                        <MessageListItem message={message} />
-                      </div>
-                    ) : (
-                      <MessageListItem key={message.id} message={message} />
-                    ),
-                    <Divider m="0" key={"$" + message.id} />,
-                  ];
-                })
-                // messages?.data && <MessageListItem message={messages?.data[0]} />
-              }
-            </React.Fragment>
-          );
-        })}
-      </div>
+    <div
+      sx={{
+        borderRight: "1px #D8D8D8 solid",
+        maxHeight: "calc(100vh - 60px)",
+        overflowX: "hidden",
+        overflowY: "auto",
+      }}
+    >
+      {data?.pages.map((messages, _idx) => {
+        const isLastPage = data?.pages?.length === _idx + 1;
+        return (
+          <React.Fragment key={_idx}>
+            {
+              messages?.data?.map((message, index) => {
+                return [
+                  isLastPage && messages?.data?.length === index + 1 ? (
+                    <div ref={lastMessageElementRef} key={message.id}>
+                      <MessageListItem message={message} />
+                    </div>
+                  ) : (
+                    <MessageListItem key={message.id} message={message} />
+                  ),
+                  <Divider m="0" key={"$" + message.id} />,
+                ];
+              })
+              // messages?.data && <MessageListItem message={messages?.data[0]} />
+            }
+          </React.Fragment>
+        );
+      })}
       {hasNextPage && (
         <Flex mt="8px" sx={{ justifyContent: "center" }}>
           <Text>Loading...</Text>
         </Flex>
       )}
-    </>
+    </div>
   );
 };
 

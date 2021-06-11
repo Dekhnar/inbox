@@ -16,6 +16,38 @@ export interface InboxViewProps {
   currentMessage?: Message;
 }
 
+const RightPanel: React.FC = ({ children }) => {
+  const { message: displayRightPanel } = useSelectedMessage();
+  return (
+    <div
+      sx={{
+        flex: "2 1 auto",
+        display: displayRightPanel ? "block" : "none",
+      }}
+    >
+      {displayRightPanel && children}
+    </div>
+  );
+};
+
+const LeftPanel: React.FC = ({ children }) => {
+  const { message: displayRightPanel } = useSelectedMessage();
+  return (
+    <div
+      sx={{
+        flex: "1 1 auto",
+        minWidth: "375px",
+        display: "block",
+        "@media screen and (max-width: 991px)": {
+          display: displayRightPanel ? "none" : "block",
+        },
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 const InboxView: React.FC<InboxViewProps> = ({
   currentMessage,
   currentRealtor,
@@ -45,7 +77,10 @@ const InboxView: React.FC<InboxViewProps> = ({
     if (realtor?.id) {
       const currentPath = router.asPath;
       let path = `/${realtor.id.toString()}`;
-      if (message?.id) path = currentPath.includes(realtor.id.toString()) ? `${path}/${message.id.toString()}` : path;
+      if (message?.id)
+        path = currentPath.includes(realtor.id.toString())
+          ? `${path}/${message.id.toString()}`
+          : path;
       if (path != currentPath) {
         if (currentPath == "/") {
           router.replace(path);
@@ -62,31 +97,14 @@ const InboxView: React.FC<InboxViewProps> = ({
     <>
       <InboxHeader />
       <Flex sx={{ pt: 60, height: "100vh" }}>
-        <div sx={{ flex: "1 1 auto", minWidth: '375px' }}>
+        <LeftPanel>
           <MessageList />
-        </div>
+        </LeftPanel>
         <RightPanel>
           <MessageDetail />
         </RightPanel>
       </Flex>
     </>
-  );
-};
-
-const RightPanel: React.FC = ({ children }) => {
-  const { message: displayRightPanel } = useSelectedMessage();
-  return (
-    <div
-      sx={{
-        flex: "2 1 auto",
-        display: displayRightPanel ? "block" : "none",
-        "@media screen and (max-width: 749px)": {
-          display: "none",
-        },
-      }}
-    >
-      {displayRightPanel && children}
-    </div>
   );
 };
 
