@@ -29,14 +29,12 @@ const theme = {
     },
     message: {
       default: {
-        height: "110px",
         minWidth: "375px",
         paddingX: 10,
         paddingY: 22,
         backgroundColor: "white",
       },
       read: {
-        height: "110px",
         minWidth: "375px",
         paddingX: 10,
         paddingY: 22,

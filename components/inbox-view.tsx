@@ -61,8 +61,8 @@ const InboxView: React.FC<InboxViewProps> = ({
   return (
     <>
       <InboxHeader />
-      <Flex sx={{ pt: 60, height: "calc(100vh - 60px)" }}>
-        <div sx={{ flex: "1 1 auto" }}>
+      <Flex sx={{ pt: 60, height: "100vh" }}>
+        <div sx={{ flex: "1 1 auto", minWidth: '375px' }}>
           <MessageList />
         </div>
         <RightPanel>

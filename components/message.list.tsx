@@ -73,6 +73,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
             flexGrow: 1,
             alignContent: "space-between",
             position: "relative",
+            overflow: "hidden",
           }}
         >
           <Column>
@@ -101,8 +102,12 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
               sx={{
                 color: readColor,
                 textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
                 overflow: "hidden",
+              }}
+              css={{
+                display: "-webkit-box",
+                "-webkit-line-clamp": "2",
+                "-webkit-box-orient": "vertical",
               }}
             >
               {truncatedBody}
