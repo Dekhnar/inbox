@@ -37,7 +37,8 @@ const InboxView: React.FC<InboxViewProps> = ({
   }, []);
 
   useEffect(() => {
-    if (noRealtorSelectedYet) setRealtor(currentRealtor ?? realtors![0]);
+    if (realtors?.length && noRealtorSelectedYet)
+      setRealtor(currentRealtor ?? realtors![0]);
   }, [realtors?.length]);
 
   useEffect(() => {

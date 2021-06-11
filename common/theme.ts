@@ -7,8 +7,11 @@ const theme = {
     primary: "#1432BE",
     secondary: "#1E91FF",
     background: "#F9F9F9",
+    "black-400": "#333333",
+    "gray-400": "#DADADA",
     gray: "#D8D8D8",
-    "gray-800": "#777777",
+    "gray-700": "#777777",
+    "gray-800": "#757575",
   },
   containers: {
     navbar: {
@@ -48,7 +51,7 @@ const theme = {
         borderRadius: "8px",
       },
       disabled: {
-        backgroundColor: "#757575",
+        backgroundColor: "gray-800",
         width: "61px",
         height: "31px",
         borderRadius: "8px",
@@ -57,11 +60,33 @@ const theme = {
   },
   icons: {
     enabled: { color: "primary" },
-    disabled: { color: "#DADADA" },
+    disabled: { color: "gray-400" },
   },
   styles: {
     ...roboto.styles,
+    p: {
+      ...roboto.styles.p,
+      fontSize: '14px',
+    }
   },
+  text: {
+    headline: {
+      ...roboto.styles.h6,
+      fontSize: '18px',
+    },
+    subtitle: {
+      ...roboto.styles.p,
+      fontSize: '16px',
+    },
+    bodyText1: {
+      ...roboto.styles.p,
+      fontSize: '16px',
+    },
+    bodyText2: {
+      ...roboto.styles.p,
+      fontSize: '14px',
+    }
+  }
 };
 
 export default theme;

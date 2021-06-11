@@ -18,17 +18,32 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
     titleLeading,
     titleTrailing,
     subtitle,
-    body,
     dateFromNowStr,
     icon,
     read: isRead,
   } = getEnrichedMessage(message);
-  const { setMessage } = useSelectedMessage();
+  const { message: selectedMessage ,setMessage } = useSelectedMessage();
+  const isSelectedMessage = selectedMessage?.id == message.id;
 
-  const dateColor = isRead ? "gray-600" : "primary";
-  const titleColor = isRead ? "gray-600" : "black";
-  const subtitleColor = isRead ? "gray-600" : "black";
+  const readColor = "gray-700";
 
+  const dateColor = isRead ? readColor : "primary";
+  const titleStyle = isRead
+    ? {
+        color: readColor,
+        fontWeight: isSelectedMessage ? "normal" : "300",
+      }
+    : {
+        color: "black",
+        fontWeight: "bold",
+      };
+  const subtitleStyle = isRead
+    ? {
+        color: readColor,
+      }
+    : {
+        color: "black",
+      };
   const handleMessageView = () => {
     return setMessage(message);
   };
@@ -36,7 +51,9 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
   return (
     <Box
       variant={
-        !isRead ? "containers.message.default" : "containers.message.read"
+        isSelectedMessage
+          ? "containers.message.read"
+          : "containers.message.default"
       }
       onClick={handleMessageView}
     >
@@ -49,22 +66,39 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
             width: 18,
           }}
         ></i>
-        <Box
-          ml={10}
+        <div
           sx={{
+            ml: "10px",
             flexGrow: 1,
             alignContent: "space-between",
             position: "relative",
           }}
         >
           <Column>
-            <Box>
-              <Text color={titleColor}>{titleLeading}</Text>
-              <Text color={titleColor}>{titleTrailing}</Text>
-            </Box>
-            <Text color={subtitleColor}>{subtitle}</Text>
+            <div>
+              <Text
+                color={titleStyle.color}
+                variant="text.headline"
+                sx={{ fontWeight: titleStyle.fontWeight }}
+              >
+                {titleLeading}
+              </Text>
+              <Text
+                color={titleStyle.color}
+                variant="text.bodyText2"
+                sx={{ fontWeight: titleStyle.fontWeight }}
+              >
+                {titleTrailing}
+              </Text>
+            </div>
+            <Text as="p" variant="text.bodyText2" color={subtitleStyle.color}>
+              {subtitle}
+            </Text>
             {/* <Text
+              as="p"
+              variant="text.bodyText2"
               sx={{
+                color: readColor,
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -75,11 +109,12 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
           </Column>
           <Text
             color={dateColor}
+            variant="text.bodyText2"
             sx={{ position: "absolute", right: 0, top: 38.77 - 10 }}
           >
             {dateFromNowStr}
           </Text>
-        </Box>
+        </div>
       </Flex>
     </Box>
   );
@@ -95,7 +130,7 @@ const MessageList = () => {
     isError,
     data,
     error,
-  } = useMessagesQuery(realtor.id!);
+  } = useMessagesQuery(realtor?.id!);
 
   const observer = useRef<IntersectionObserver>();
   const lastMessageElementRef = useCallback(
@@ -133,18 +168,21 @@ const MessageList = () => {
           const isLastPage = data?.pages?.length === _idx + 1;
           return (
             <React.Fragment key={_idx}>
-              {messages?.data?.map((message, index) => {
-                return [
-                  isLastPage && messages?.data?.length === index + 1 ? (
-                    <div ref={lastMessageElementRef} key={message.id}>
-                      <MessageListItem message={message} />
-                    </div>
-                  ) : (
-                    <MessageListItem key={message.id} message={message} />
-                  ),
-                  <Divider m="0" key={"$" + message.id} />,
-                ];
-              })}
+              {
+                messages?.data?.map((message, index) => {
+                  return [
+                    isLastPage && messages?.data?.length === index + 1 ? (
+                      <div ref={lastMessageElementRef} key={message.id}>
+                        <MessageListItem message={message} />
+                      </div>
+                    ) : (
+                      <MessageListItem key={message.id} message={message} />
+                    ),
+                    <Divider m="0" key={"$" + message.id} />,
+                  ];
+                })
+                // messages?.data && <MessageListItem message={messages?.data[0]} />
+              }
             </React.Fragment>
           );
         })}

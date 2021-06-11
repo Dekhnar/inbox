@@ -79,7 +79,7 @@ const MessageDetail: React.FC = () => {
                     width: iconSize,
                   }}
                 ></i>
-                <Text>{titleLeading}</Text>
+                <Text variant="text.headline">{titleLeading}</Text>
               </Flex>
               <Flex>
                 <Column
@@ -88,8 +88,8 @@ const MessageDetail: React.FC = () => {
                     marginRight: "116px",
                   }}
                 >
-                  {email && <Text>Email</Text>}
-                  {phone && <Text>Téléphone</Text>}
+                  {email && <Text variant="text.subtitle" color="black-400">Email</Text>}
+                  {phone && <Text variant="text.subtitle" color="black-400">Téléphone</Text>}
                 </Column>
                 <Column
                   sx={{
@@ -97,8 +97,16 @@ const MessageDetail: React.FC = () => {
                     marginRight: "116px",
                   }}
                 >
-                  {email && <Text>{email}</Text>}
-                  {phone && <Text>{phone}</Text>}
+                  {email && (
+                    <Text variant="text.subtitle" color="primary">
+                      {email}
+                    </Text>
+                  )}
+                  {phone && (
+                    <Text variant="text.subtitle" color="primary">
+                      {phone}
+                    </Text>
+                  )}
                 </Column>
               </Flex>
             </>
@@ -115,9 +123,16 @@ const MessageDetail: React.FC = () => {
           }}
         >
           <Column>
-            <Text>{titleLeading}</Text>
-            <Text>{dateStr}</Text>
-            <Text sx={{ width: "100%", marginTop: 45 }}>{body}</Text>
+            <Text variant="text.headline">{titleLeading}</Text>
+            <Text variant="text.bodyText2" color="gray-700">
+              {dateStr}
+            </Text>
+            <Text
+              variant="text.bodyText1" color="black-400"
+              sx={{ width: "100%", marginTop: 45 }}
+            >
+              {body}
+            </Text>
           </Column>
         </Card>
       </Column>
