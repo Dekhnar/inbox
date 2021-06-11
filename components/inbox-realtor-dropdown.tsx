@@ -23,7 +23,11 @@ const InboxRealtorDropdown: React.FC<React.SVGAttributes<{}>> = () => {
   return (
     <div>
       <select
-        value={realtor ? options.find(r => r.value === realtor.id)?.value : options[0].value}
+        value={
+          realtor
+            ? options.find((r) => r.value === realtor.id)?.value
+            : options[0].value
+        }
         onChange={(e) => {
           e.preventDefault();
           const id = e.target.value;

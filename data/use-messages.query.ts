@@ -2,21 +2,20 @@ import { Message, MessagesService, PaginationMetadata } from "@api";
 import { request } from "@api/core/request";
 import { QueryFunctionContext, useInfiniteQuery } from "react-query";
 
-//! Have to create this method due to none support of headers yet
-//! https://github.com/ferdikoomen/openapi-typescript-codegen/issues/388
-
 export type PaginatedMessages = {
   data: Message[];
   paginatorInfo: PaginationMetadata;
 };
 
-const getMessagesByRealtorId = async ({
+export const getMessagesByRealtorId = async ({
   queryKey,
   pageParam,
 }: QueryFunctionContext): Promise<PaginatedMessages> => {
   const [_key, params] = queryKey;
-  const  realtorId = params as number;
+  const realtorId = params as number;
   const paginator = (pageParam || {}) as PaginationMetadata;
+  //! Have to create this method due to none support of headers yet
+  //! https://github.com/ferdikoomen/openapi-typescript-codegen/issues/388
   const result = await request({
     method: "GET",
     path: `/realtors/${realtorId}/messages/`,
@@ -34,7 +33,7 @@ const getMessagesByRealtorId = async ({
   let paginatorInfo = JSON.parse(
     headers.get("x-pagination")
   ) as PaginationMetadata;
-  return { data, paginatorInfo  };
+  return { data, paginatorInfo };
 };
 
 export const useMessagesQuery = (id: number) => {
@@ -43,7 +42,9 @@ export const useMessagesQuery = (id: number) => {
     getMessagesByRealtorId,
     {
       getNextPageParam: ({ paginatorInfo }) => {
-        return paginatorInfo.total_pages != paginatorInfo.page ? paginatorInfo: undefined;
+        return paginatorInfo.total_pages != paginatorInfo.page
+          ? paginatorInfo
+          : undefined;
       },
     }
   );

@@ -19,27 +19,37 @@ const useUpdateMessageMutation = () => {
       MessagesService.updateMessage(messageId, realtorId, requestBody),
     {
       onSuccess: (message, { variables: { messageId, realtorId } }) => {
-        const realtorsState = queryClient.getQueryState<Realtor[], Error>(`RealtorsService.getRealtors`);
+        const realtorsState = queryClient.getQueryState<Realtor[], Error>(
+          `RealtorsService.getRealtors`
+        );
         const newRealtorsState = realtorsState?.data?.map((r) => {
           if (r.id !== realtorId) return r;
           return {
             ...r,
-            unread_messages: r.unread_messages! - 1
+            unread_messages: r.unread_messages! - 1,
           };
         });
-        queryClient.setQueryData(`RealtorsService.getRealtors`, newRealtorsState);
-        const messagesState = queryClient.getQueryState<InfiniteData<PaginatedMessages>>([`MessagesService.getMessages`, realtorId]);
+        queryClient.setQueryData(
+          `RealtorsService.getRealtors`,
+          newRealtorsState
+        );
+        const messagesState = queryClient.getQueryState<
+          InfiniteData<PaginatedMessages>
+        >([`MessagesService.getMessages`, realtorId]);
         const newPages = messagesState?.data?.pages.map((p) => ({
           ...p,
           data: p.data.map((m) => {
             if (m.id !== messageId) return m;
             return message;
-          })
+          }),
         }));
-        queryClient.setQueryData([`MessagesService.getMessages`, realtorId], (data) => ({
-          pages: newPages,
-          pageParams: (data as InfiniteData<PaginatedMessages>).pageParams,
-        }))
+        queryClient.setQueryData(
+          [`MessagesService.getMessages`, realtorId],
+          (data) => ({
+            pages: newPages,
+            pageParams: (data as InfiniteData<PaginatedMessages>).pageParams,
+          })
+        );
       },
       onError: () => {
         queryClient.invalidateQueries(`MessagesService.getMessages`);
