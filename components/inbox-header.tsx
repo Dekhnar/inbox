@@ -7,24 +7,26 @@ import InboxRealtorDropdown from "@components/inbox-realtor-dropdown";
 
 const InboxHeader = () => {
   return (
-    <nav
-      sx={{
-        variant: "containers.navbar",
-        position: "fixed",
-        zIndex: "999",
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <InboxNavbarIcon width={133} height={37} sx={{ fill: "secondary" }} />
-      <Flex>
-        <InboxCounter />
-        <Box marginRight="16px" />
-        <InboxRealtorDropdown />
-      </Flex>
-    </nav>
+    <header>
+      <nav
+        sx={{
+          variant: "containers.navbar",
+          position: "fixed",
+          zIndex: "999",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <InboxNavbarIcon width={133} height={37} sx={{ fill: "secondary" }} />
+        <Flex>
+          <InboxCounter />
+          <Box marginRight="16px" />
+          <InboxRealtorDropdown />
+        </Flex>
+      </nav>
+    </header>
   );
 };
 
