@@ -56,12 +56,17 @@ const MessageDetail: React.FC = () => {
 
   return (
     <Box
-      variant="containers.page"
-      paddingLeft="28px"
-      paddingRight="28px"
-      paddingTop="36px"
-      paddingBottom="33px"
-      sx={{ height: "100%" }}
+      sx={{
+        height: "100%",
+        marginLeft: "28px",
+        marginRight: "28px",
+        marginTop: "36px",
+        marginBottom: "33px",
+        "@media screen and (max-width: 600px)": {
+          marginLeft: "20px",
+          marginRight: "20px",
+        },
+      }}
     >
       <Column sx={{ height: "100%" }}>
         <Card

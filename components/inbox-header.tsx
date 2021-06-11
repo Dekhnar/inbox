@@ -11,7 +11,7 @@ const InboxHeader = () => {
     const parts = router.asPath.split("/");
     parts.pop();
     router.push(parts.join("/"));
-  }
+  };
   return (
     <header>
       <nav

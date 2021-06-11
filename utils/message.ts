@@ -1,22 +1,21 @@
 import "dayjs/locale/fr";
-import Dayjs from 'dayjs';
+import Dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import updateLocale from "dayjs/plugin/updateLocale";
 import { Message } from "@api";
 
 Dayjs.extend(updateLocale);
 Dayjs.extend(calendar);
-Dayjs.updateLocale('fr', {
+Dayjs.updateLocale("fr", {
   calendar: {
-    lastDay: '[Hier]',
-    lastWeek: 'dddd',
-    nextWeek: 'dddd',
+    lastDay: "[Hier]",
+    lastWeek: "dddd",
+    nextWeek: "dddd",
     sameDay: "h:mm",
     sameElse: "D/M/YY",
   },
 });
 Dayjs.locale("fr");
-
 
 const getUserFullName = ({
   firstname,

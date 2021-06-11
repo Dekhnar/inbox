@@ -23,8 +23,8 @@ const RightPanel: React.FC = ({ children }) => {
   return (
     <div
       sx={{
+        variant: "containers.page",
         flex: "2 1 auto",
-        display: displayRightPanel ? "block" : "none",
       }}
     >
       {displayRightPanel && children}

@@ -51,7 +51,7 @@ const MessageListItem = ({ message }: MessageListItemProps) => {
 
   const handleKeyPress = (event: KeyboardEvent<HTMLLIElement>) => {
     if (event.key === "Enter") handleMessageView();
-  }
+  };
 
   return (
     <li
