@@ -67,12 +67,13 @@ const InboxView: React.FC<InboxViewProps> = ({
 
   const router = useRouter();
   useEffect(() => {
+    // Mangage default value
     setRealtor(defaultRealtor);
     setMessage(defaultMessage);
   }, []);
 
   useEffect(() => {
-    // Mangage nvaigation back
+    // Mangage navigation back
     const path = router.asPath;
     const ids = path.split("/");
     ids.shift();
